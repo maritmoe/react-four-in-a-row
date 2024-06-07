@@ -1,33 +1,93 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 function App() {
   const [isPlayer1, changePlayer] = useState(true);
-  const [circles, setCircles] = useState([{ x: 40, y: 300, colour: "purple" }]);
+  const [circles, setCircles] = useState([]);
+  const [prevCircles, setPrevCircles] = useState([]);
+  const [circle, setCircle] = useState({ x: "", y: "", colour: "" });
   const [error, setError] = useState("");
+  const [winner, setWinner] = useState("");
+
+  const checkDirection = (directionValues, direction) => {
+    let filterBy;
+    let sortBy;
+    if (direction === "row") {
+      filterBy = "x";
+      sortBy = "y";
+    } else if (direction === "column") {
+      filterBy = "y";
+      sortBy = "x";
+    }
+    for (let i = 0; i < directionValues.length; i++) {
+      const circlesInRow = circles
+        .filter((c) => c[filterBy] === directionValues[i])
+        .sort((a, b) => a[sortBy] - b[sortBy]);
+      let colourCount = 0;
+      let colour = "green";
+      for (let j = 0; j < circlesInRow.length; j++) {
+        const circleColour = circlesInRow[j].colour;
+        if (circleColour === colour) {
+          colourCount++;
+          if (Number(colourCount) === Number(4)) {
+            console.log("Winner!");
+            setWinner(`The winner is: ${colour.toUpperCase()}`);
+            break;
+          }
+        } else {
+          colour = circleColour;
+          colourCount = 1;
+        }
+      }
+      if (Number(colourCount) === Number(4)) {
+        console.log("In", direction, "with value", directionValues[i]);
+        break;
+      }
+    }
+  };
+
+  useEffect(() => {
+    const rows = [40, 90, 140, 190, 240, 290, 340];
+    checkDirection(rows, "row");
+    const columns = [50, 100, 150, 200, 250, 300];
+    checkDirection(columns, "column");
+    // TODO: check if anyone has 4 in a row on the diagonals
+    // TODO: end game is a winner is found
+  }, [circles]);
 
   const handleTurn = (event) => {
-    // Find out which coloumn was clicked
-    // TODO: change ranges a little to match clicked
-    let coloumn;
+    if (circle.x && circle.y && circle.colour) {
+      // Used to fill in the board of all previous moves
+      setPrevCircles([
+        ...prevCircles,
+        {
+          ...circle,
+        },
+      ]);
+      setCircle({ x: "", y: "", colour: "" });
+    }
+    // Find out which column was clicked
+    let column;
     const { clientX } = event;
-    if (clientX < 90) {
-      coloumn = 40;
-    } else if (clientX < 140) {
-      coloumn = 90;
-    } else if (clientX < 190) {
-      coloumn = 140;
-    } else if (clientX < 240) {
-      coloumn = 190;
-    } else if (clientX < 290) {
-      coloumn = 240;
-    } else if (clientX < 340) {
-      coloumn = 290;
+    // Shift clientX to better match what was clicked
+    const shiftedClientX = clientX + 10;
+    if (shiftedClientX < 90) {
+      column = 40;
+    } else if (shiftedClientX < 140) {
+      column = 90;
+    } else if (shiftedClientX < 190) {
+      column = 140;
+    } else if (shiftedClientX < 240) {
+      column = 190;
+    } else if (shiftedClientX < 290) {
+      column = 240;
+    } else if (shiftedClientX < 340) {
+      column = 290;
     } else {
-      coloumn = 340;
+      column = 340;
     }
 
     // Find the lowest row that is empty
-    const currentHeight = circles.filter((c) => c.x === coloumn).length;
+    let currentHeight = circles.filter((c) => c.x === column).length;
     let row;
     let hasError;
     switch (currentHeight) {
@@ -61,21 +121,34 @@ function App() {
         break;
     }
     if (!hasError) {
+      // Used to animate last move made
+      setCircle({
+        x: column,
+        y: row,
+        colour: isPlayer1 ? "green" : "purple",
+      });
+      // Used to check for a winner
       setCircles([
         ...circles,
-        { x: coloumn, y: row, colour: isPlayer1 ? "green" : "purple" },
+        {
+          x: column,
+          y: row,
+          colour: isPlayer1 ? "green" : "purple",
+        },
       ]);
       changePlayer(!isPlayer1);
       setError("");
     }
-
-    // TODO: get animation to work
-    // TODO: check if anyone has 4 in a row, print message
   };
+
+  // TODO: make animation stop after 1 iteration for each new move made
 
   return (
     <div>
       <h1>4 In A Row</h1>
+      <p>Click on the column you want to place your colour in.</p>
+      <p>Green player starts, purple player is second.</p>
+      {winner && <h2>{winner}</h2>}
       {error && <p>{error}</p>}
       <svg
         xmlns="http://www.w3.org/2000/svg"
@@ -144,24 +217,33 @@ function App() {
           strokeWidth="10"
           strokeMiterlimit="10"
         />
-        {circles.map((c) => (
+        {circle.y && (
           <circle
-            key={c}
-            cx={c.x}
-            cy={c.y}
-            r="18"
-            fill={c.colour}
-            stroke="rgb(0, 0, 0)"
+            key={"" + circle.x + circle.y}
+            cx={circle.x}
+            cy={circle.y}
+            r="21"
+            fill={circle.colour}
           >
             <animate
+              key={"" + circle.x + circle.y}
               attributeName="cy"
-              begin="1s"
-              dur="4s"
+              begin="0s"
+              dur="3s"
               from="0"
-              to="300"
-              repeatCount="1"
+              to={circle.y}
+              repeatCount="indefinite"
             />
           </circle>
+        )}
+        {prevCircles.map((c) => (
+          <circle
+            key={"" + c.x + c.y}
+            cx={c.x}
+            cy={c.y}
+            r="21"
+            fill={c.colour}
+          ></circle>
         ))}
         <rect
           x="10"
