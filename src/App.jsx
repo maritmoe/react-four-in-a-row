@@ -4,7 +4,13 @@ function App() {
   const [isPlayer1, changePlayer] = useState(true);
   const [circles, setCircles] = useState([]);
   const [prevCircles, setPrevCircles] = useState([]);
-  const [circle, setCircle] = useState({ x: "", y: "", colour: "" });
+  const [circle, setCircle] = useState({
+    x: "",
+    y: "",
+    increasing: "",
+    decreasing: "",
+    colour: "",
+  });
   const [error, setError] = useState("");
   const [winner, setWinner] = useState("");
 
@@ -16,6 +22,9 @@ function App() {
       sortBy = "y";
     } else if (direction === "column") {
       filterBy = "y";
+      sortBy = "x";
+    } else if (direction === "increasing" || direction === "decreasing") {
+      filterBy = direction;
       sortBy = "x";
     }
     for (let i = 0; i < directionValues.length; i++) {
@@ -56,7 +65,9 @@ function App() {
     checkDirection(rows, "row");
     const columns = [50, 100, 150, 200, 250, 300];
     checkDirection(columns, "column");
-    // TODO: check if anyone has 4 in a row on the diagonals
+    const diagonalValues = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11];
+    checkDirection(diagonalValues, "increasing");
+    checkDirection(diagonalValues, "decreasing");
   }, [circles]);
 
   const handleTurn = (event) => {
@@ -68,7 +79,13 @@ function App() {
           ...circle,
         },
       ]);
-      setCircle({ x: "", y: "", colour: "" });
+      setCircle({
+        x: "",
+        y: "",
+        increasing: "",
+        decreasing: "",
+        colour: "",
+      });
     }
     // Find out which column was clicked
     let column;
@@ -130,6 +147,8 @@ function App() {
       setCircle({
         x: column,
         y: row,
+        increasing: (column - 40) / 50 + (row - 50) / 50,
+        decreasing: (column - 40) / 50 + Math.abs(row - 300) / 50,
         colour: isPlayer1 ? "green" : "purple",
       });
       // Used to check for a winner
@@ -138,6 +157,8 @@ function App() {
         {
           x: column,
           y: row,
+          increasing: (column - 40) / 50 + (row - 50) / 50,
+          decreasing: (column - 40) / 50 + Math.abs(row - 300) / 50,
           colour: isPlayer1 ? "green" : "purple",
         },
       ]);
@@ -155,7 +176,13 @@ function App() {
           ...circle,
         },
       ]);
-      setCircle({ x: "", y: "", colour: "" });
+      setCircle({
+        x: "",
+        y: "",
+        increasing: "",
+        decreasing: "",
+        colour: "",
+      });
     }
   };
 
