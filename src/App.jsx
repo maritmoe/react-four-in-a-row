@@ -46,12 +46,12 @@ function App() {
   };
 
   useEffect(() => {
+    // TODO: check that 4 in a row does not contain blank field in the middle
     const rows = [40, 90, 140, 190, 240, 290, 340];
     checkDirection(rows, "row");
     const columns = [50, 100, 150, 200, 250, 300];
     checkDirection(columns, "column");
     // TODO: check if anyone has 4 in a row on the diagonals
-    // TODO: end game is a winner is found
   }, [circles]);
 
   const handleTurn = (event) => {
@@ -141,6 +141,19 @@ function App() {
     }
   };
 
+  const handleGameOver = () => {
+    setError("The game is over. Reload page to play again.");
+    if (circle.x && circle.y && circle.colour) {
+      setPrevCircles([
+        ...prevCircles,
+        {
+          ...circle,
+        },
+      ]);
+      setCircle({ x: "", y: "", colour: "" });
+    }
+  };
+
   // TODO: make animation stop after 1 iteration for each new move made
 
   return (
@@ -154,7 +167,7 @@ function App() {
         xmlns="http://www.w3.org/2000/svg"
         width="380"
         height="380"
-        onClick={handleTurn}
+        onClick={winner ? handleGameOver : handleTurn}
       >
         <defs>
           <mask id="holes" x="0" y="0" width="400" height="400">
