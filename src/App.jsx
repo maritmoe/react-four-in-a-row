@@ -217,6 +217,15 @@ function App() {
           strokeWidth="10"
           strokeMiterlimit="10"
         />
+        <rect
+          x="10"
+          y="10"
+          width="360"
+          height="330"
+          rx="49.5"
+          ry="49.5"
+          fill="lightblue"
+        />
         {circle.y && (
           <circle
             key={"" + circle.x + circle.y}
