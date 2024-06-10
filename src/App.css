@@ -1,0 +1,40 @@
+#title {
+  text-align: center;
+  padding: 10px;
+}
+
+body {
+  background-color: floralwhite;
+}
+
+p,
+li {
+  font-size: 18px;
+}
+
+.green {
+  color: green;
+  text-shadow: 0.5px 0.5px 3px lightgreen;
+}
+
+.purple {
+  color: purple;
+  text-shadow: 0.5px 0.5px 3px lightpink;
+}
+
+#content {
+  display: grid;
+  grid-template-columns: 40% 60%;
+}
+
+#how-to-play-box {
+  border: solid #6c8ebf 2px;
+  border-radius: 8px;
+  width: fit-content;
+  padding: 10px;
+  align-items: center;
+}
+
+#error {
+  color: darkred;
+}

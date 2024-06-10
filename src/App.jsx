@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import "./App.css";
 
 function App() {
   const [isPlayer1, changePlayer] = useState(true);
@@ -45,7 +46,7 @@ function App() {
           colourCount++;
           if (Number(colourCount) === Number(4)) {
             console.log("Winner!");
-            setWinner(`The winner is: ${colour.toUpperCase()}`);
+            setWinner(colour);
             break;
           }
         } else {
@@ -187,129 +188,392 @@ function App() {
   };
 
   // TODO: make animation stop after 1 iteration for each new move made
+  // TODO: players can choose their own colour
+  // TODO: confetti, balloons and applause for winner!
 
   return (
     <div>
-      <h1>4 In A Row</h1>
-      <p>Click on the column you want to place your colour in.</p>
-      <p>Green player starts, purple player is second.</p>
-      {winner && <h2>{winner}</h2>}
-      {error && <p>{error}</p>}
-      <svg
-        xmlns="http://www.w3.org/2000/svg"
-        width="380"
-        height="380"
-        onClick={winner ? handleGameOver : handleTurn}
-      >
-        <defs>
-          <mask id="holes" x="0" y="0" width="400" height="400">
-            <rect width="380" height="380" fill="white" />
-            <circle cx="90" cy="300" r="20" fill="black" pointerEvents="all" />
-            <circle cx="90" cy="50" r="20" fill="black" pointerEvents="all" />
-            <circle cx="90" cy="100" r="20" fill="black" pointerEvents="all" />
-            <circle cx="90" cy="150" r="20" fill="black" pointerEvents="all" />
-            <circle cx="90" cy="200" r="20" fill="black" pointerEvents="all" />
-            <circle cx="90" cy="250" r="20" fill="black" pointerEvents="all" />
-            <circle cx="40" cy="300" r="20" fill="black" pointerEvents="all" />
-            <circle cx="40" cy="50" r="20" fill="black" pointerEvents="all" />
-            <circle cx="40" cy="100" r="20" fill="black" pointerEvents="all" />
-            <circle cx="40" cy="150" r="20" fill="black" pointerEvents="all" />
-            <circle cx="40" cy="200" r="20" fill="black" pointerEvents="all" />
-            <circle cx="40" cy="250" r="20" fill="black" pointerEvents="all" />
-            <circle cx="140" cy="300" r="20" fill="black" pointerEvents="all" />
-            <circle cx="140" cy="50" r="20" fill="black" pointerEvents="all" />
-            <circle cx="140" cy="100" r="20" fill="black" pointerEvents="all" />
-            <circle cx="140" cy="150" r="20" fill="black" pointerEvents="all" />
-            <circle cx="140" cy="200" r="20" fill="black" pointerEvents="all" />
-            <circle cx="140" cy="250" r="20" fill="black" pointerEvents="all" />
-            <circle cx="190" cy="300" r="20" fill="black" pointerEvents="all" />
-            <circle cx="190" cy="50" r="20" fill="black" pointerEvents="all" />
-            <circle cx="190" cy="100" r="20" fill="black" pointerEvents="all" />
-            <circle cx="190" cy="150" r="20" fill="black" pointerEvents="all" />
-            <circle cx="190" cy="200" r="20" fill="black" pointerEvents="all" />
-            <circle cx="190" cy="250" r="20" fill="black" pointerEvents="all" />
-            <circle cx="290" cy="300" r="20" fill="black" pointerEvents="all" />
-            <circle cx="290" cy="50" r="20" fill="black" pointerEvents="all" />
-            <circle cx="290" cy="100" r="20" fill="black" pointerEvents="all" />
-            <circle cx="290" cy="150" r="20" fill="black" pointerEvents="all" />
-            <circle cx="290" cy="200" r="20" fill="black" pointerEvents="all" />
-            <circle cx="290" cy="250" r="20" fill="black" pointerEvents="all" />
-            <circle cx="240" cy="300" r="20" fill="black" pointerEvents="all" />
-            <circle cx="240" cy="50" r="20" fill="black" pointerEvents="all" />
-            <circle cx="240" cy="100" r="20" fill="black" pointerEvents="all" />
-            <circle cx="240" cy="150" r="20" fill="black" pointerEvents="all" />
-            <circle cx="240" cy="200" r="20" fill="black" pointerEvents="all" />
-            <circle cx="240" cy="250" r="20" fill="black" pointerEvents="all" />
-            <circle cx="340" cy="300" r="20" fill="black" pointerEvents="all" />
-            <circle cx="340" cy="50" r="20" fill="black" pointerEvents="all" />
-            <circle cx="340" cy="100" r="20" fill="black" pointerEvents="all" />
-            <circle cx="340" cy="150" r="20" fill="black" pointerEvents="all" />
-            <circle cx="340" cy="200" r="20" fill="black" pointerEvents="all" />
-            <circle cx="340" cy="250" r="20" fill="black" pointerEvents="all" />
-          </mask>
-        </defs>
-        <path
-          d="M 330 330 L 362.5 370"
-          fill="black"
-          stroke="#d6b656"
-          strokeWidth="10"
-          strokeMiterlimit="10"
-        />
-        <path
-          d="M 20 370 L 52.5 330"
-          fill="black"
-          stroke="#d6b656"
-          strokeWidth="10"
-          strokeMiterlimit="10"
-        />
-        <rect
-          x="10"
-          y="10"
-          width="360"
-          height="330"
-          rx="49.5"
-          ry="49.5"
-          fill="lightblue"
-        />
-        {circle.y && (
-          <circle
-            key={"" + circle.x + circle.y}
-            cx={circle.x}
-            cy={circle.y}
-            r="21"
-            fill={circle.colour}
-          >
-            <animate
+      <h1 id="title">4 In A Row</h1>
+      <div id="content">
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          width="380"
+          height="380"
+          onClick={winner ? handleGameOver : handleTurn}
+        >
+          <defs>
+            <mask id="holes" x="0" y="0" width="400" height="400">
+              <rect width="380" height="380" fill="white" />
+              <circle
+                cx="90"
+                cy="300"
+                r="20"
+                fill="black"
+                pointerEvents="all"
+              />
+              <circle cx="90" cy="50" r="20" fill="black" pointerEvents="all" />
+              <circle
+                cx="90"
+                cy="100"
+                r="20"
+                fill="black"
+                pointerEvents="all"
+              />
+              <circle
+                cx="90"
+                cy="150"
+                r="20"
+                fill="black"
+                pointerEvents="all"
+              />
+              <circle
+                cx="90"
+                cy="200"
+                r="20"
+                fill="black"
+                pointerEvents="all"
+              />
+              <circle
+                cx="90"
+                cy="250"
+                r="20"
+                fill="black"
+                pointerEvents="all"
+              />
+              <circle
+                cx="40"
+                cy="300"
+                r="20"
+                fill="black"
+                pointerEvents="all"
+              />
+              <circle cx="40" cy="50" r="20" fill="black" pointerEvents="all" />
+              <circle
+                cx="40"
+                cy="100"
+                r="20"
+                fill="black"
+                pointerEvents="all"
+              />
+              <circle
+                cx="40"
+                cy="150"
+                r="20"
+                fill="black"
+                pointerEvents="all"
+              />
+              <circle
+                cx="40"
+                cy="200"
+                r="20"
+                fill="black"
+                pointerEvents="all"
+              />
+              <circle
+                cx="40"
+                cy="250"
+                r="20"
+                fill="black"
+                pointerEvents="all"
+              />
+              <circle
+                cx="140"
+                cy="300"
+                r="20"
+                fill="black"
+                pointerEvents="all"
+              />
+              <circle
+                cx="140"
+                cy="50"
+                r="20"
+                fill="black"
+                pointerEvents="all"
+              />
+              <circle
+                cx="140"
+                cy="100"
+                r="20"
+                fill="black"
+                pointerEvents="all"
+              />
+              <circle
+                cx="140"
+                cy="150"
+                r="20"
+                fill="black"
+                pointerEvents="all"
+              />
+              <circle
+                cx="140"
+                cy="200"
+                r="20"
+                fill="black"
+                pointerEvents="all"
+              />
+              <circle
+                cx="140"
+                cy="250"
+                r="20"
+                fill="black"
+                pointerEvents="all"
+              />
+              <circle
+                cx="190"
+                cy="300"
+                r="20"
+                fill="black"
+                pointerEvents="all"
+              />
+              <circle
+                cx="190"
+                cy="50"
+                r="20"
+                fill="black"
+                pointerEvents="all"
+              />
+              <circle
+                cx="190"
+                cy="100"
+                r="20"
+                fill="black"
+                pointerEvents="all"
+              />
+              <circle
+                cx="190"
+                cy="150"
+                r="20"
+                fill="black"
+                pointerEvents="all"
+              />
+              <circle
+                cx="190"
+                cy="200"
+                r="20"
+                fill="black"
+                pointerEvents="all"
+              />
+              <circle
+                cx="190"
+                cy="250"
+                r="20"
+                fill="black"
+                pointerEvents="all"
+              />
+              <circle
+                cx="290"
+                cy="300"
+                r="20"
+                fill="black"
+                pointerEvents="all"
+              />
+              <circle
+                cx="290"
+                cy="50"
+                r="20"
+                fill="black"
+                pointerEvents="all"
+              />
+              <circle
+                cx="290"
+                cy="100"
+                r="20"
+                fill="black"
+                pointerEvents="all"
+              />
+              <circle
+                cx="290"
+                cy="150"
+                r="20"
+                fill="black"
+                pointerEvents="all"
+              />
+              <circle
+                cx="290"
+                cy="200"
+                r="20"
+                fill="black"
+                pointerEvents="all"
+              />
+              <circle
+                cx="290"
+                cy="250"
+                r="20"
+                fill="black"
+                pointerEvents="all"
+              />
+              <circle
+                cx="240"
+                cy="300"
+                r="20"
+                fill="black"
+                pointerEvents="all"
+              />
+              <circle
+                cx="240"
+                cy="50"
+                r="20"
+                fill="black"
+                pointerEvents="all"
+              />
+              <circle
+                cx="240"
+                cy="100"
+                r="20"
+                fill="black"
+                pointerEvents="all"
+              />
+              <circle
+                cx="240"
+                cy="150"
+                r="20"
+                fill="black"
+                pointerEvents="all"
+              />
+              <circle
+                cx="240"
+                cy="200"
+                r="20"
+                fill="black"
+                pointerEvents="all"
+              />
+              <circle
+                cx="240"
+                cy="250"
+                r="20"
+                fill="black"
+                pointerEvents="all"
+              />
+              <circle
+                cx="340"
+                cy="300"
+                r="20"
+                fill="black"
+                pointerEvents="all"
+              />
+              <circle
+                cx="340"
+                cy="50"
+                r="20"
+                fill="black"
+                pointerEvents="all"
+              />
+              <circle
+                cx="340"
+                cy="100"
+                r="20"
+                fill="black"
+                pointerEvents="all"
+              />
+              <circle
+                cx="340"
+                cy="150"
+                r="20"
+                fill="black"
+                pointerEvents="all"
+              />
+              <circle
+                cx="340"
+                cy="200"
+                r="20"
+                fill="black"
+                pointerEvents="all"
+              />
+              <circle
+                cx="340"
+                cy="250"
+                r="20"
+                fill="black"
+                pointerEvents="all"
+              />
+            </mask>
+          </defs>
+          <path
+            d="M 330 330 L 362.5 370"
+            fill="black"
+            stroke="#d6b656"
+            strokeWidth="10"
+            strokeMiterlimit="10"
+          />
+          <path
+            d="M 20 370 L 52.5 330"
+            fill="black"
+            stroke="#d6b656"
+            strokeWidth="10"
+            strokeMiterlimit="10"
+          />
+          <rect
+            x="10"
+            y="10"
+            width="360"
+            height="330"
+            rx="49.5"
+            ry="49.5"
+            fill="lightblue"
+          />
+          {circle.y && (
+            <circle
               key={"" + circle.x + circle.y}
-              attributeName="cy"
-              begin="0s"
-              dur="3s"
-              from="0"
-              to={circle.y}
-              repeatCount="indefinite"
-            />
-          </circle>
-        )}
-        {prevCircles.map((c) => (
-          <circle
-            key={"" + c.x + c.y}
-            cx={c.x}
-            cy={c.y}
-            r="21"
-            fill={c.colour}
-          ></circle>
-        ))}
-        <rect
-          x="10"
-          y="10"
-          width="360"
-          height="330"
-          rx="49.5"
-          ry="49.5"
-          fill="#6c8ebf"
-          mask="url(#holes)"
-        />
-      </svg>
+              cx={circle.x}
+              cy={circle.y}
+              r="21"
+              fill={circle.colour}
+            >
+              <animate
+                key={"" + circle.x + circle.y}
+                attributeName="cy"
+                begin="0s"
+                dur="3s"
+                from="0"
+                to={circle.y}
+                repeatCount="indefinite"
+              />
+            </circle>
+          )}
+          {prevCircles.map((c) => (
+            <circle
+              key={"" + c.x + c.y}
+              cx={c.x}
+              cy={c.y}
+              r="21"
+              fill={c.colour}
+            ></circle>
+          ))}
+          <rect
+            x="10"
+            y="10"
+            width="360"
+            height="330"
+            rx="49.5"
+            ry="49.5"
+            fill="#6c8ebf"
+            mask="url(#holes)"
+          />
+        </svg>
+        <div id="information">
+          <div id="how-to-play-box">
+            <h2>How To Play:</h2>
+            <ul>
+              <li>Click on the column you want to place your colour in.</li>
+              <li>
+                <span className="green">Green</span> player starts,{" "}
+                <span className="purple">Purple</span> player is second.
+              </li>
+              <li>
+                The player that first places four circles in a row, column or on
+                the diagonal wins.
+              </li>
+            </ul>
+          </div>
+          {winner && (
+            <h2>
+              The winner is:{" "}
+              <span className={winner}>{winner.toUpperCase()}</span>
+            </h2>
+          )}
+          {error && <p id="error">{error}</p>}
+        </div>
+      </div>
     </div>
   );
 }
