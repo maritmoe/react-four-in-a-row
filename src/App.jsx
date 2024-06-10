@@ -26,7 +26,13 @@ function App() {
       let colour = "green";
       for (let j = 0; j < circlesInRow.length; j++) {
         const circleColour = circlesInRow[j].colour;
-        if (circleColour === colour) {
+        if (
+          circleColour === colour && // check that circle has same colour as previous one
+          (j === 0 ||
+            // to check if the circle is adjacent to the previous one and does not have a blank circle in between
+            Number(circlesInRow[j][sortBy] - circlesInRow[j - 1][sortBy]) ===
+              Number(50))
+        ) {
           colourCount++;
           if (Number(colourCount) === Number(4)) {
             console.log("Winner!");
@@ -46,7 +52,6 @@ function App() {
   };
 
   useEffect(() => {
-    // TODO: check that 4 in a row does not contain blank field in the middle
     const rows = [40, 90, 140, 190, 240, 290, 340];
     checkDirection(rows, "row");
     const columns = [50, 100, 150, 200, 250, 300];
