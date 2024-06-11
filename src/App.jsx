@@ -8,7 +8,6 @@ function App() {
   const [error, setError] = useState("");
   const [winner, setWinner] = useState("");
 
-  // TODO: make animation stop after 1 iteration for each new move made
   // TODO: players can choose their own colour
 
   return (

@@ -13,6 +13,8 @@ function Board({ winner, setWinner, setError }) {
     colour: "",
   });
 
+  const [winningCircles, setWinningCircles] = useState([]);
+
   const checkDirection = (directionValues, direction) => {
     let filterBy;
     let sortBy;
@@ -45,6 +47,7 @@ function Board({ winner, setWinner, setError }) {
           if (Number(colourCount) === Number(4)) {
             console.log("Winner!");
             setWinner(colour);
+            setWinningCircles(circlesInRow.slice(j - 3, j + 1));
             break;
           }
         } else {
@@ -68,6 +71,22 @@ function Board({ winner, setWinner, setError }) {
     checkDirection(diagonalValues, "increasing");
     checkDirection(diagonalValues, "decreasing");
   }, [circles]);
+
+  useEffect(() => {
+    if (circle.y) {
+      const circleAnimation = document.getElementById("circle-animation");
+      circleAnimation.beginElement();
+    }
+  }, [circle]);
+
+  useEffect(() => {
+    if (winningCircles[0]) {
+      const winning = document.getElementsByClassName("winning-animation");
+      for (let i = 0; i < 4; i++) {
+        winning[i].beginElement();
+      }
+    }
+  }, [winningCircles]);
 
   const handleTurn = (event) => {
     if (circle.x && circle.y && circle.colour) {
@@ -259,7 +278,7 @@ function Board({ winner, setWinner, setError }) {
         height="330"
         rx="49.5"
         ry="49.5"
-        fill="lightblue"
+        fill="#5D76A9"
       />
       {circle.y && (
         <circle
@@ -270,13 +289,13 @@ function Board({ winner, setWinner, setError }) {
           fill={circle.colour}
         >
           <animate
-            key={"" + circle.x + circle.y}
+            id="circle-animation"
             attributeName="cy"
-            begin="0s"
-            dur="3s"
+            begin="indefinite"
+            dur="1s"
             from="0"
             to={circle.y}
-            repeatCount="indefinite"
+            repeatCount="1"
           />
         </circle>
       )}
@@ -288,6 +307,27 @@ function Board({ winner, setWinner, setError }) {
           r="21"
           fill={c.colour}
         ></circle>
+      ))}
+      {winningCircles.map((c) => (
+        <circle
+          key={"winning" + c.x + c.y}
+          cx={c.x}
+          cy={c.y}
+          r="20"
+          fill="none"
+          strokeWidth="5"
+          stroke="gold"
+        >
+          <animate
+            className="winning-animation"
+            attributeName="r"
+            begin="indefinite"
+            dur="2s"
+            from="0"
+            to="20"
+            repeatCount="1"
+          />
+        </circle>
       ))}
       <rect
         x="10"
