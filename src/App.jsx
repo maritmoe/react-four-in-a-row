@@ -2,6 +2,7 @@ import { useState } from "react";
 import "./App.css";
 import Board from "./Board";
 import Realistic from "react-canvas-confetti/dist/presets/realistic";
+import Applause from "./Applause";
 
 function App() {
   const [error, setError] = useState("");
@@ -9,7 +10,6 @@ function App() {
 
   // TODO: make animation stop after 1 iteration for each new move made
   // TODO: players can choose their own colour
-  // TODO: confetti, balloons and applause for winner!
 
   return (
     <div>
@@ -38,6 +38,7 @@ function App() {
                 <span className={winner}>{winner.toUpperCase()}</span>
               </h2>
               <Realistic autorun={{ speed: 4, duration: 5 }} />
+              <Applause />
             </div>
           )}
           {error && <p id="error">{error}</p>}
