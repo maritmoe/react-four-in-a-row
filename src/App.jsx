@@ -1,6 +1,7 @@
 import { useState } from "react";
 import "./App.css";
 import Board from "./Board";
+import Realistic from "react-canvas-confetti/dist/presets/realistic";
 
 function App() {
   const [error, setError] = useState("");
@@ -31,10 +32,13 @@ function App() {
             </ul>
           </div>
           {winner && (
-            <h2>
-              The winner is:{" "}
-              <span className={winner}>{winner.toUpperCase()}</span>
-            </h2>
+            <div>
+              <h2>
+                The winner is:{" "}
+                <span className={winner}>{winner.toUpperCase()}</span>
+              </h2>
+              <Realistic autorun={{ speed: 4, duration: 5 }} />
+            </div>
           )}
           {error && <p id="error">{error}</p>}
         </div>
