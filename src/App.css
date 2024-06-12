@@ -27,6 +27,11 @@ li {
   grid-template-columns: 40% 60%;
 }
 
+#board {
+  width: 99%;
+  text-align: center;
+}
+
 #how-to-play-box {
   border: solid #6c8ebf 2px;
   border-radius: 8px;

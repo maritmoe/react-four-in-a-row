@@ -107,7 +107,7 @@ function Board({ winner, setWinner, setError }) {
     }
     // Find out which column was clicked
     let column;
-    const { clientX } = event;
+    const { clientX } = event; //TODO: use something else so it becomes right when board is centered
     // Shift clientX to better match what was clicked
     const shiftedClientX = clientX + 10;
     if (shiftedClientX < 90) {

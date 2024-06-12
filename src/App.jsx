@@ -12,9 +12,11 @@ function App() {
 
   return (
     <div>
-      <h1 id="title">4 In A Row</h1>
-      <div id="content">
-        <Board winner={winner} setWinner={setWinner} setError={setError} />
+      <h1 id="title">4 IN A ROW</h1>
+      <div id={window.innerWidth > 999 ? "content" : ""}>
+        <div id="board">
+          <Board winner={winner} setWinner={setWinner} setError={setError} />
+        </div>
         <div id="information">
           <div id="how-to-play-box">
             <h2>How To Play:</h2>
