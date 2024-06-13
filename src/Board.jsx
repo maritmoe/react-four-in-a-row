@@ -106,21 +106,24 @@ function Board({ winner, setWinner, setError }) {
       });
     }
     // Find out which column was clicked
+    const svg = document.getElementById("svg");
+    var pt = svg.createSVGPoint();
+    pt.x = event.clientX;
+    pt.y = event.clientY;
+    const svgP = pt.matrixTransform(svg.getScreenCTM().inverse());
+    const xClicked = svgP.x;
     let column;
-    const { clientX } = event; //TODO: use something else so it becomes right when board is centered
-    // Shift clientX to better match what was clicked
-    const shiftedClientX = clientX + 10;
-    if (shiftedClientX < 90) {
+    if (xClicked < 65) {
       column = 40;
-    } else if (shiftedClientX < 140) {
+    } else if (xClicked < 115) {
       column = 90;
-    } else if (shiftedClientX < 190) {
+    } else if (xClicked < 165) {
       column = 140;
-    } else if (shiftedClientX < 240) {
+    } else if (xClicked < 215) {
       column = 190;
-    } else if (shiftedClientX < 290) {
+    } else if (xClicked < 265) {
       column = 240;
-    } else if (shiftedClientX < 340) {
+    } else if (xClicked < 315) {
       column = 290;
     } else {
       column = 340;
@@ -205,14 +208,15 @@ function Board({ winner, setWinner, setError }) {
   };
   return (
     <svg
+      id="svg"
       xmlns="http://www.w3.org/2000/svg"
       width="380"
       height="380"
       onClick={winner ? handleGameOver : handleTurn}
     >
       <defs>
-        <mask id="holes" x="0" y="0" width="400" height="400">
-          <rect width="380" height="380" fill="white" />
+        <mask id="holes" width="380" height="380">
+          <rect width="360" x="10" y="10" height="330" fill="white" />
           <circle cx="90" cy="300" r="20" fill="black" pointerEvents="all" />
           <circle cx="90" cy="50" r="20" fill="black" pointerEvents="all" />
           <circle cx="90" cy="100" r="20" fill="black" pointerEvents="all" />
